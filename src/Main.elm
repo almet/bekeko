@@ -20,7 +20,8 @@ import Task as Task
 type alias Model =
     { selectedPattern : Pattern
     , pickers : Array Picker.State
-    , repeats : Int
+    , repeatsX : Int
+    , repeatsY : Int
     }
 
 
@@ -28,7 +29,8 @@ init : ( Model, Cmd Msg )
 init =
     ( { selectedPattern = Patterns.dano
       , pickers = Array.repeat 6 Picker.init
-      , repeats = 10
+      , repeatsX = 10
+      , repeatsY = 3
       }
     , Task.perform (always <| GenerateRandomColors) (Task.succeed ())
     )
@@ -43,7 +45,8 @@ type Msg
     | SetPattern String
     | GenerateRandomColors
     | ColorsGenerated (List Color)
-    | SetRepeats Int
+    | SetRepeatsX Int
+    | SetRepeatsY Int
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -77,8 +80,11 @@ update msg model =
             in
             ( { model | selectedPattern = pattern }, Cmd.none )
 
-        SetRepeats repeats ->
-            ( { model | repeats = repeats }, Cmd.none )
+        SetRepeatsX repeats ->
+            ( { model | repeatsX = repeats }, Cmd.none )
+
+        SetRepeatsY repeats ->
+            ( { model | repeatsY = repeats }, Cmd.none )
 
         GenerateRandomColors ->
             ( model, Random.generate ColorsGenerated (shuffle Picker.availableColors) )
@@ -123,7 +129,7 @@ viewMenu model =
         ]
         [ a
             [ href "/"
-            , class "d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none"
+            , class "align-items-center mb-3 mb-md-0 me-md-auto"
             ]
             [ img
                 [ src "logo.webp"
@@ -136,21 +142,22 @@ viewMenu model =
             [ li [] [ viewSelector ]
             , li [] generatePickers
             , li [] [ button [ type_ "button", class "btn btn-link", onClick GenerateRandomColors ] [ "Choisir aléatoirement" |> text ] ]
-            , li [] [ viewRepeats model ]
+            , li [] [ viewRepeats model.repeatsX SetRepeatsX "horizontales" ]
+            , li [] [ viewRepeats model.repeatsY SetRepeatsY "verticales" ]
             ]
         ]
 
 
-viewRepeats : Model -> Html Msg
-viewRepeats model =
+viewRepeats : Int -> (Int -> Msg) -> String -> Html Msg
+viewRepeats repeats msg txt =
     div [ class "repeats" ]
-        [ label [ for "repeats", class "form-label" ] [ "Répétitions" |> text ]
+        [ label [ for "repeats", class "form-label" ] [ "Répétitions " ++ txt |> text ]
         , input
-            [ onInput (String.toInt >> Maybe.withDefault 0 >> SetRepeats)
+            [ onInput (String.toInt >> Maybe.withDefault 0 >> msg)
             , type_ "range"
             , class "form-range"
             , id "repeats"
-            , value (model.repeats |> String.fromInt)
+            , value (repeats |> String.fromInt)
             ]
             []
         ]
@@ -174,7 +181,7 @@ viewSelector =
 
 
 viewPattern : Model -> Html Msg
-viewPattern { selectedPattern, pickers, repeats } =
+viewPattern { selectedPattern, pickers, repeatsX, repeatsY } =
     let
         colors =
             pickers |> Array.map .selectedColor |> Array.toList
@@ -194,15 +201,25 @@ viewPattern { selectedPattern, pickers, repeats } =
         displayPatternLine chars =
             tr [] (chars |> List.map displayPatternChar)
 
-        patternWithRepetition =
+        patternWithHorizontalRepetition =
             case selectedPattern.type_ of
                 Patterns.Repeats ->
-                    patternContent |> List.map (\x -> List.repeat repeats x |> List.concat)
+                    patternContent |> List.map (\x -> List.repeat repeatsX x |> List.concat)
 
                 Patterns.Long ->
                     patternContent
+
+        patternWithVerticalRepetition =
+            case selectedPattern.type_ of
+                Patterns.Long ->
+                    patternWithHorizontalRepetition
+
+                Patterns.Repeats ->
+                    patternWithHorizontalRepetition |> List.repeat repeatsY |> List.concat
     in
-    table [] (patternWithRepetition |> List.map displayPatternLine)
+    div [ class "container" ]
+        [ table [] (patternWithVerticalRepetition |> List.map displayPatternLine)
+        ]
 
 
 
