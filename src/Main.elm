@@ -13,6 +13,11 @@ import Random.List exposing (shuffle)
 import Task as Task
 
 
+type View
+    = SeePattern
+    | CreatePattern
+
+
 
 ---- MODEL ----
 
@@ -22,6 +27,7 @@ type alias Model =
     , pickers : Array Picker.State
     , repeatsX : Int
     , repeatsY : Int
+    , currentView : View
     }
 
 
@@ -31,6 +37,7 @@ init =
       , pickers = Array.repeat 6 Picker.init
       , repeatsX = 10
       , repeatsY = 4
+      , currentView = SeePattern
       }
     , Task.perform (always <| GenerateRandomColors) (Task.succeed ())
     )
@@ -47,6 +54,7 @@ type Msg
     | ColorsGenerated (List Color)
     | SetRepeatsX Int
     | SetRepeatsY Int
+    | SetView View
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -101,6 +109,9 @@ update msg model =
             , Cmd.none
             )
 
+        SetView newView ->
+            ( { model | currentView = newView }, Cmd.none )
+
 
 
 ---- VIEW ----
@@ -110,7 +121,12 @@ view : Model -> Html Msg
 view model =
     div [ class "d-flex flex-nowrap" ]
         [ viewMenu model
-        , viewPattern model
+        , case model.currentView of
+            CreatePattern ->
+                div [] []
+
+            SeePattern ->
+                viewPattern model
         ]
 
 
@@ -139,9 +155,10 @@ viewMenu model =
         , ul
             [ class "nav nav-pills flex-column mb-auto"
             ]
-            [ li [] [ viewSelector ]
+            [ li [] [ viewPatternSelector ]
             , li [] generatePickers
             , li [] [ button [ type_ "button", class "btn btn-link", onClick GenerateRandomColors ] [ "Couleurs aléatoires" |> text ] ]
+            , li [] [ button [ type_ "button", class "btn btn-link", onClick (SetView CreatePattern) ] [ "Créer un motif" |> text ] ]
             , li [] [ viewRepeats model model.repeatsX SetRepeatsX "horizontales" ]
             , li [] [ viewRepeats model model.repeatsY SetRepeatsY "verticales" ]
             ]
@@ -170,8 +187,8 @@ viewRepeats model repeats msg txt =
             div [] []
 
 
-viewSelector : Html Msg
-viewSelector =
+viewPatternSelector : Html Msg
+viewPatternSelector =
     let
         optionView pattern =
             option

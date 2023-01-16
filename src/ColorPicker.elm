@@ -43,8 +43,7 @@ availableColors =
     , Color "Framboise" "#C72C48" "#000"
     , Color "Nature" "#BAB6A6" "#000"
     , Color "Taupe" "#81423A" "#000"
-    , Color "Violet" "#4B0212" "#fff"
-    , Color "Bordeaux" "#6d071a" "#fff"
+    , Color "Bordeaux" "#4B0212" "#fff"
     ]
 
 
