@@ -60,7 +60,7 @@ o o o o o o o o o
 / / / / / / / / /
    /   /   /   /
 
- c c   c cc  c c  
+ c c   c c   c c  
 cc cc cc cc cc cc
   l     l     l
 cc cc cc cc cc cc

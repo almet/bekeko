@@ -7,7 +7,7 @@ import Dict exposing (Dict)
 import Html exposing (Html, a, button, div, hr, img, input, label, li, option, select, span, table, td, text, tr, ul)
 import Html.Attributes exposing (class, for, href, id, src, style, type_, value)
 import Html.Events exposing (onClick, onInput)
-import Patterns as Patterns exposing (Pattern)
+import Patterns as Patterns exposing (Pattern, PatternType(..))
 import Random as Random
 import Random.List exposing (shuffle)
 import Task as Task
@@ -142,27 +142,32 @@ viewMenu model =
             [ li [] [ viewSelector ]
             , li [] generatePickers
             , li [] [ button [ type_ "button", class "btn btn-link", onClick GenerateRandomColors ] [ "Couleurs aléatoires" |> text ] ]
-            , li [] [ viewRepeats model.repeatsX SetRepeatsX "horizontales" ]
-            , li [] [ viewRepeats model.repeatsY SetRepeatsY "verticales" ]
+            , li [] [ viewRepeats model model.repeatsX SetRepeatsX "horizontales" ]
+            , li [] [ viewRepeats model model.repeatsY SetRepeatsY "verticales" ]
             ]
         ]
 
 
-viewRepeats : Int -> (Int -> Msg) -> String -> Html Msg
-viewRepeats repeats msg txt =
-    div [ class "repeats" ]
-        [ label [ for "repeats", class "form-label" ] [ "Répétitions " ++ txt ++ " (" ++ (repeats |> String.fromInt) ++ ")" |> text ]
-        , input
-            [ onInput (String.toInt >> Maybe.withDefault 0 >> msg)
-            , type_ "range"
-            , class "form-range"
-            , id "repeats"
-            , value (repeats |> String.fromInt)
-            , Html.Attributes.min "1"
-            , Html.Attributes.max "20"
-            ]
-            []
-        ]
+viewRepeats : Model -> Int -> (Int -> Msg) -> String -> Html Msg
+viewRepeats model repeats msg txt =
+    case model.selectedPattern.type_ of
+        Repeats ->
+            div [ class "repeats" ]
+                [ label [ for "repeats", class "form-label" ] [ "Répétitions " ++ txt ++ " (" ++ (repeats |> String.fromInt) ++ ")" |> text ]
+                , input
+                    [ onInput (String.toInt >> Maybe.withDefault 0 >> msg)
+                    , type_ "range"
+                    , class "form-range"
+                    , id "repeats"
+                    , value (repeats |> String.fromInt)
+                    , Html.Attributes.min "1"
+                    , Html.Attributes.max "20"
+                    ]
+                    []
+                ]
+
+        Long ->
+            div [] []
 
 
 viewSelector : Html Msg
