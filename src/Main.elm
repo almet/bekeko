@@ -141,7 +141,7 @@ viewMenu model =
             ]
             [ li [] [ viewSelector ]
             , li [] generatePickers
-            , li [] [ button [ type_ "button", class "btn btn-link", onClick GenerateRandomColors ] [ "Choisir aléatoirement" |> text ] ]
+            , li [] [ button [ type_ "button", class "btn btn-link", onClick GenerateRandomColors ] [ "Couleurs aléatoires" |> text ] ]
             , li [] [ viewRepeats model.repeatsX SetRepeatsX "horizontales" ]
             , li [] [ viewRepeats model.repeatsY SetRepeatsY "verticales" ]
             ]
