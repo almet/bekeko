@@ -124,8 +124,8 @@ viewMenu model =
             List.range 0 5 |> List.map pickerView
     in
     div
-        [ class "d-flex flex-column flex-shrink-0 p-3 bg-light"
-        , style "width" "280px"
+        [ id "menu"
+        , class "d-flex flex-column flex-shrink-0 p-3 bg-light"
         ]
         [ a
             [ href "/"

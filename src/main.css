@@ -67,3 +67,13 @@ table>tr>td {
   margin: 0px;
   border: 0px;
 }
+
+#menu {
+  width: 280px;
+}
+
+@media screen and (max-width:500px) {
+  #menu {
+    width: 220px;
+  }
+}

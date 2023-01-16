@@ -34,21 +34,21 @@ o o o o o o """
 
 dartloString =
     """
-xxxxxxxxxxxxx
+xxxxxxxxxxxx
  x x x x x x
-xxxxxxxxxxxxx
+xxxxxxxxxxxx
 
-/// /// /// /
- /   /   /   
-/// /// /// /
+/// /// /// 
+ /   /   /  
+/// /// /// 
 
-xxxxxxxxxxxxx
- x x x x x x 
-xxxxxxxxxxxxx
+xxxxxxxxxxxx
+ x x x x x x
+xxxxxxxxxxxx
 
-oo o o oo o o
-   o o    o o
-oo o o oo o o"""
+oo o o oo o 
+   o o    o 
+oo o o oo o """
 
 
 shenakoString =
@@ -81,11 +81,35 @@ xxx xxx xxx xxx xx
  x   x   x   x   x
 xxx xxx xxx xxx xx
  x   x   x   x   x
+xxx xxx xxx xxx xx
+ x   x   x   x   x
+xxx xxx xxx xxx xx
+ x   x   x   x   x
+xxx xxx xxx xxx xx
+ x   x   x   x   x
+xxx xxx xxx xxx xx
+ x   x   x   x   x
+xxx xxx xxx xxx xx
+ x   x   x   x   x
+xxx xxx xxx xxx xx
+ x   x   x   x   x
+xxx xxx xxx xxx xx
+ x   x   x   x   x
+xxx xxx xxx xxx xx
+ x   x   x   x   x
+xxx xxx xxx xxx xx
+ x   x   x   x   x
+xxx xxx xxx xxx xx
+ x   x   x   x   x
+xxx xxx xxx xxx xx
+ x   x   x   x   x
+
 """
 
 
 alazaniString =
-    """
+    """  x   x   x 
+ xxx xxx xxx
 xxoxxxoxxxox
 xoooxoooxooo
 oo/ooo/ooo/o
