@@ -29,9 +29,7 @@ xx xx xx xx
 
 o o o o o o 
  o o o o o o
-o o o o o o 
-
-"""
+o o o o o o """
 
 
 dartloString =
@@ -50,9 +48,7 @@ xxxxxxxxxxxxx
 
 oo o o oo o o
    o o    o o
-oo o o oo o o
-
-"""
+oo o o oo o o"""
 
 
 shenakoString =
@@ -90,22 +86,20 @@ xxx xxx xxx xxx xx
 
 alazaniString =
     """
-xxoxxxoxxxoxxx
-xoooxoooxoooxo
-oo/ooo/ooo/ooo
-o///o///o///o/
-// /// /// ///
-/   /   /   / 
-  x   x   x   
- xxx xxx xxx x
-xxoxxxoxxxoxxx
-xoooxoooxoooxo
-oo/ooo/ooo/ooo
-o///o///o///o/
-// /// /// ///
-/   /   /   / 
-
-"""
+xxoxxxoxxxox
+xoooxoooxooo
+oo/ooo/ooo/o
+o///o///o///
+// /// /// /
+/   /   /   
+  x   x   x 
+ xxx xxx xxx
+xxoxxxoxxxox
+xoooxoooxooo
+oo/ooo/ooo/o
+o///o///o///
+// /// /// /
+/   /   /   """
 
 
 dano : Pattern
