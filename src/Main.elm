@@ -30,7 +30,7 @@ init =
     ( { selectedPattern = Patterns.dano
       , pickers = Array.repeat 6 Picker.init
       , repeatsX = 10
-      , repeatsY = 3
+      , repeatsY = 4
       }
     , Task.perform (always <| GenerateRandomColors) (Task.succeed ())
     )
@@ -129,7 +129,7 @@ viewMenu model =
         ]
         [ a
             [ href "/"
-            , class "align-items-center mb-3 mb-md-0 me-md-auto"
+            , class "mb-3 mb-md-0"
             ]
             [ img
                 [ src "logo.webp"
@@ -151,13 +151,15 @@ viewMenu model =
 viewRepeats : Int -> (Int -> Msg) -> String -> Html Msg
 viewRepeats repeats msg txt =
     div [ class "repeats" ]
-        [ label [ for "repeats", class "form-label" ] [ "Répétitions " ++ txt |> text ]
+        [ label [ for "repeats", class "form-label" ] [ "Répétitions " ++ txt ++ " (" ++ (repeats |> String.fromInt) ++ ")" |> text ]
         , input
             [ onInput (String.toInt >> Maybe.withDefault 0 >> msg)
             , type_ "range"
             , class "form-range"
             , id "repeats"
             , value (repeats |> String.fromInt)
+            , Html.Attributes.min "1"
+            , Html.Attributes.max "20"
             ]
             []
         ]
