@@ -7,10 +7,10 @@ import Dict exposing (Dict)
 import Html exposing (Html, a, button, div, h1, hr, img, input, label, li, option, select, span, table, td, text, textarea, tr, ul)
 import Html.Attributes exposing (class, cols, for, href, id, src, style, type_, value)
 import Html.Events exposing (onClick, onInput)
-import Patterns as Patterns exposing (Pattern, PatternType(..))
-import Random as Random
+import Patterns exposing (Pattern, PatternType(..))
+import Random
 import Random.List exposing (shuffle)
-import Task as Task
+import Task
 
 
 type View
@@ -84,6 +84,12 @@ update msg model =
                         "Shenako" ->
                             Patterns.shenako
 
+                        "Makratela" ->
+                            Patterns.makratela
+
+                        "Koklata" ->
+                            Patterns.koklata
+
                         _ ->
                             Patterns.dano
             in
@@ -144,11 +150,11 @@ view model =
 viewMenu : Model -> Html Msg
 viewMenu model =
     let
-        pickerView x =
-            Picker.view (PickerChanged x) (model.pickers |> Array.get x |> Maybe.withDefault Picker.init)
+        pickerView char x =
+            Picker.view (PickerChanged x) (model.pickers |> Array.get x |> Maybe.withDefault Picker.init) char (model.currentView == CreatePattern)
 
         generatePickers =
-            List.range 0 5 |> List.map pickerView
+            List.range 0 (Patterns.availableChars |> List.length) |> List.map2 pickerView Patterns.availableChars
     in
     div
         [ id "menu"
@@ -244,7 +250,7 @@ viewPattern { selectedPattern, pickers, repeatsX, repeatsY } =
             selectedPattern.content
 
         colorMatch =
-            List.map2 Tuple.pair (" xo/cl" |> String.toList) colors |> Dict.fromList
+            List.map2 Tuple.pair Patterns.availableChars colors |> Dict.fromList
 
         colorFromChar char =
             colorMatch |> Dict.get char |> Maybe.withDefault Picker.defaultColor |> .color

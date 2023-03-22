@@ -86,8 +86,8 @@ update msg state =
             { state | open = False }
 
 
-view : (State -> msg) -> State -> Html msg
-view toMsg state =
+view : (State -> msg) -> State -> Char -> Bool -> Html msg
+view toMsg state char displayChar =
     let
         viewColor ({ name, color, textColor } as option) =
             div
@@ -110,5 +110,13 @@ view toMsg state =
                 , style "color" state.selectedColor.textColor
                 ]
                 []
-            , div [ class "color-name" ] [ text state.selectedColor.name ]
+            , let
+                colorChar =
+                    if displayChar == True then
+                        " (" ++ (char |> String.fromChar) ++ ")"
+
+                    else
+                        ""
+              in
+              div [ class "color-name" ] [ state.selectedColor.name ++ colorChar |> text ]
             ]

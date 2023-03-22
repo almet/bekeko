@@ -3,10 +3,13 @@ module Patterns exposing
     , PatternContent
     , PatternType(..)
     , alazani
+    , availableChars
     , availablePatterns
     , dano
     , dartlo
     , fromString
+    , koklata
+    , makratela
     , shenako
     , toString
     )
@@ -34,7 +37,7 @@ o o o o o o
 o o o o o o """
 
 
-dartloString =
+dartloStrlng =
     """
 xxxxxxxxxxxx
  x x x x x x
@@ -128,13 +131,139 @@ o///o///o///
 /   /   /   """
 
 
+makratelaString =
+    """xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+              
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+              
+              
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+              
+              
+              
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+              
+              
+              
+              
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+              
+              
+              
+              
+              
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+              
+              
+              
+              
+              
+              
+xxxxxxxxxxxxxx
+xxxxxxxxxxxxxx
+              
+              
+              
+              
+              
+              
+              
+xxxxxxxxxxxxxx
+              
+              
+              
+              
+              
+              
+              
+              """
+
+
+koklataString =
+    """oooooooooooo
+/oo/oo/oo/oo
+o//o//o//o//
+oooooooooooo
+ocooocooocoo
+clcoclcoclco
+ocooocooocoo
+oooooooooooo
+o//o//o//o//
+/oo/oo/oo/oo
+oooooooooooo
+
+x x x x x x 
+    
+ l   l   l  
+lll lll lll 
+ l   l   l  
+    
+x x x x x x 
+
+oooooooooooo
+/o/o/o/o/o/o
+oooooooooooo
+occooccoocco
+ooccooccoocc
+oooooooooooo
+/o/o/o/o/o/o
+oooooooooooo
+
+x x x x x x 
+    
+ l   l   l  
+lll lll lll 
+ l   l   l  
+    
+x x x x x x 
+
+oooooooooooo
+/o/o/o/o/o/o
+oooooooooooo
+occooccoocco
+ooccooccoocc
+oooooooooooo
+/o/o/o/o/o/o
+oooooooooooo
+
+x x x x x x 
+"""
+
+
 dano : Pattern
 dano =
     Pattern "Dano" (fromString danoString) Repeats
 
 
 dartlo =
-    Pattern "Dartlo" (fromString dartloString) Repeats
+    Pattern "Dartlo" (fromString dartloStrlng) Repeats
 
 
 shenako =
@@ -145,13 +274,28 @@ alazani =
     Pattern "Alazani" (fromString alazaniString) Repeats
 
 
+makratela =
+    Pattern "Makratela" (fromString makratelaString) Long
+
+
+koklata =
+    Pattern "Koklata" (fromString koklataString) Repeats
+
+
 availablePatterns : List Pattern
 availablePatterns =
     [ dano
     , dartlo
     , shenako
     , alazani
+    , makratela
+    , koklata
     ]
+
+
+availableChars : List Char
+availableChars =
+    " xo/cl" |> String.toList
 
 
 type alias Pattern =
@@ -172,18 +316,18 @@ type alias PatternContent =
 
 toString : PatternContent -> String
 toString content =
-    (++) "\u{000D}" (content |> List.foldl line "" |> String.trimLeft)
+    (++) "\u{000D}" (content |> List.foldl llne "" |> String.trimLeft)
 
 
-line : List Char -> String -> String
-line current acc =
+llne : List Char -> String -> String
+llne current acc =
     (++) acc (current |> String.fromList |> (++) "\u{000D}")
 
 
 fromString : String -> PatternContent
 fromString string =
     let
-        lineLength =
+        llneLength =
             string
                 |> String.lines
                 |> List.map String.length
@@ -194,4 +338,4 @@ fromString string =
     in
     string
         |> String.lines
-        |> List.map (String.padRight lineLength ' ' >> String.toList)
+        |> List.map (String.padRight llneLength ' ' >> String.toList)
