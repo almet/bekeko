@@ -6,7 +6,9 @@ module Patterns exposing
     , availablePatterns
     , dano
     , dartlo
+    , fromString
     , shenako
+    , toString
     )
 
 import Maybe exposing (withDefault)
@@ -166,6 +168,16 @@ type PatternType
 
 type alias PatternContent =
     List (List Char)
+
+
+toString : PatternContent -> String
+toString content =
+    (++) "\u{000D}" (content |> List.foldl line "" |> String.trimLeft)
+
+
+line : List Char -> String -> String
+line current acc =
+    (++) acc (current |> String.fromList |> (++) "\u{000D}")
 
 
 fromString : String -> PatternContent

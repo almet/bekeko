@@ -4,8 +4,8 @@ import Array exposing (Array)
 import Browser
 import ColorPicker as Picker exposing (Color)
 import Dict exposing (Dict)
-import Html exposing (Html, a, button, div, hr, img, input, label, li, option, select, span, table, td, text, tr, ul)
-import Html.Attributes exposing (class, for, href, id, src, style, type_, value)
+import Html exposing (Html, a, button, div, h1, hr, img, input, label, li, option, select, span, table, td, text, textarea, tr, ul)
+import Html.Attributes exposing (class, cols, for, href, id, src, style, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Patterns as Patterns exposing (Pattern, PatternType(..))
 import Random as Random
@@ -55,6 +55,7 @@ type Msg
     | SetRepeatsX Int
     | SetRepeatsY Int
     | SetView View
+    | UpdatePattern String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -109,6 +110,16 @@ update msg model =
             , Cmd.none
             )
 
+        UpdatePattern string ->
+            let
+                selectedPattern =
+                    model.selectedPattern
+
+                newPattern =
+                    { selectedPattern | content = string |> Patterns.fromString }
+            in
+            ( { model | selectedPattern = newPattern }, Cmd.none )
+
         SetView newView ->
             ( { model | currentView = newView }, Cmd.none )
 
@@ -123,7 +134,7 @@ view model =
         [ viewMenu model
         , case model.currentView of
             CreatePattern ->
-                div [] []
+                viewEditPattern model
 
             SeePattern ->
                 viewPattern model
@@ -158,11 +169,30 @@ viewMenu model =
             [ li [] [ viewPatternSelector ]
             , li [] generatePickers
             , li [] [ button [ type_ "button", class "btn btn-link", onClick GenerateRandomColors ] [ "Couleurs aléatoires" |> text ] ]
-            , li [] [ button [ type_ "button", class "btn btn-link", onClick (SetView CreatePattern) ] [ "Créer un motif" |> text ] ]
+            , li [] [ viewLinkToPatternEdition model ]
             , li [] [ viewRepeats model model.repeatsX SetRepeatsX "horizontales" ]
             , li [] [ viewRepeats model model.repeatsY SetRepeatsY "verticales" ]
             ]
         ]
+
+
+viewLinkToPatternEdition : Model -> Html Msg
+viewLinkToPatternEdition model =
+    let
+        ( txt, action ) =
+            case model.currentView of
+                SeePattern ->
+                    ( "Éditer le motif", CreatePattern )
+
+                CreatePattern ->
+                    ( "Retour au motif", SeePattern )
+    in
+    a
+        [ type_ "button"
+        , class "btn btn-link"
+        , onClick (SetView action)
+        ]
+        [ txt |> text ]
 
 
 viewRepeats : Model -> Int -> (Int -> Msg) -> String -> Html Msg
@@ -243,6 +273,19 @@ viewPattern { selectedPattern, pickers, repeatsX, repeatsY } =
     in
     div [ class "container" ]
         [ table [] (patternWithVerticalRepetition |> List.map displayPatternLine)
+        ]
+
+
+viewEditPattern : Model -> Html Msg
+viewEditPattern model =
+    div [ class "main" ]
+        [ h1 [] [ "Édition du motif " ++ model.selectedPattern.name |> text ]
+        , div [ class "container" ]
+            [ div [ class "row" ]
+                [ div [ class "col" ] [ viewPattern { model | repeatsX = 2, repeatsY = 2 } ]
+                , div [ class "col" ] [ textarea [ id "text-pattern", class "form-control", onInput UpdatePattern, cols 13 ] [ model.selectedPattern.content |> Patterns.toString |> text ] ]
+                ]
+            ]
         ]
 
 
